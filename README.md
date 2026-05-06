@@ -2,6 +2,8 @@
 
 QR-аар нээгддэг, нууц үгтэй 3D цэцгийн жижиг сайт.
 
+Live: https://mrkenz1.github.io/nuuts-tsetserleg/
+
 ## Гол зүйлс
 
 - Нууц үг: `0217`
