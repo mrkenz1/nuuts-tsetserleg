@@ -74,9 +74,14 @@
           <button class="flower-tab" type="button" data-flower="lily">Сараана</button>
         </nav>
 
-        <aside class="info-panel" aria-labelledby="infoTitle">
-          <p class="eyebrow" id="infoCategory">Rosa</p>
-          <h3 id="infoTitle">Сарнай</h3>
+        <aside class="info-panel" id="infoPanel" aria-labelledby="infoTitle">
+          <div class="info-panel__head">
+            <div>
+              <p class="eyebrow" id="infoCategory">Rosa</p>
+              <h3 id="infoTitle">Сарнай</h3>
+            </div>
+            <button class="icon-button info-close" id="infoCloseBtn" type="button" title="Хаах">×</button>
+          </div>
           <p id="infoSummary"></p>
           <dl class="facts" id="flowerFacts"></dl>
         </aside>

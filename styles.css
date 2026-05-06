@@ -313,6 +313,22 @@ input {
     transform 0.22s ease;
 }
 
+.info-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.info-panel__head h3 {
+  margin-bottom: 12px;
+}
+
+.info-close {
+  display: none;
+  flex: 0 0 auto;
+}
+
 .info-panel p {
   color: var(--muted);
   line-height: 1.55;
@@ -481,9 +497,34 @@ input {
   }
 
   .info-panel {
+    left: 16px;
     right: 16px;
     bottom: 92px;
-    max-height: 34vh;
+    width: auto;
+    max-height: min(58vh, 520px);
+    opacity: 0;
+    transform: translateY(18px);
+    pointer-events: none;
+  }
+
+  .garden.is-info-open .info-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .garden.is-qr-open .info-panel,
+  .garden.is-qr-open.is-info-open .info-panel {
+    opacity: 0;
+    transform: translateY(18px);
+    pointer-events: none;
+  }
+
+  .info-close {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
   }
 
   .flower-tabs {
@@ -520,8 +561,6 @@ input {
   }
 
   .info-panel {
-    left: 16px;
-    width: auto;
     padding: 14px;
   }
 

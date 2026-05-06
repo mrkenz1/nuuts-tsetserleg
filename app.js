@@ -88,6 +88,8 @@ const dom = {
   error: document.getElementById("passwordError"),
   canvas: document.getElementById("flowerCanvas"),
   title: document.getElementById("flowerTitle"),
+  infoPanel: document.getElementById("infoPanel"),
+  infoClose: document.getElementById("infoCloseBtn"),
   infoCategory: document.getElementById("infoCategory"),
   infoTitle: document.getElementById("infoTitle"),
   infoSummary: document.getElementById("infoSummary"),
@@ -118,12 +120,16 @@ let currentFlower = "rose";
 let currentMood = "dawn";
 let autoRotate = true;
 let lastTime = 0;
+let canvasTapStart = null;
+
+const mobileInfoMedia = window.matchMedia("(max-width: 760px)");
 
 initGate();
 initThree();
 setMood("dawn");
 showFlower("rose");
 setupEvents();
+syncInfoPanelMode();
 prepareQr();
 animate();
 
@@ -196,7 +202,10 @@ function initThree() {
 
 function setupEvents() {
   dom.tabs.forEach((tab) => {
-    tab.addEventListener("click", () => showFlower(tab.dataset.flower));
+    tab.addEventListener("click", () => {
+      showFlower(tab.dataset.flower);
+      if (isMobileInfoMode()) closeInfoPanel();
+    });
   });
 
   dom.moodButtons.forEach((button) => {
@@ -211,6 +220,17 @@ function setupEvents() {
 
   dom.qrToggle.addEventListener("click", () => toggleQr(true));
   dom.qrClose.addEventListener("click", () => toggleQr(false));
+  dom.infoClose.addEventListener("click", closeInfoPanel);
+  dom.canvas.addEventListener("pointerdown", handleCanvasPointerDown);
+  dom.canvas.addEventListener("pointerup", handleCanvasPointerUp);
+  dom.canvas.addEventListener("pointercancel", () => {
+    canvasTapStart = null;
+  });
+  if (mobileInfoMedia.addEventListener) {
+    mobileInfoMedia.addEventListener("change", syncInfoPanelMode);
+  } else {
+    mobileInfoMedia.addListener(syncInfoPanelMode);
+  }
   dom.qrUrl.addEventListener("input", () => generateQr(dom.qrUrl.value));
   dom.copyLink.addEventListener("click", copyQrLink);
   dom.downloadQr.addEventListener("click", downloadQr);
@@ -252,6 +272,51 @@ function renderInfo(type) {
     wrapper.append(dt, dd);
     dom.flowerFacts.append(wrapper);
   });
+}
+
+function isMobileInfoMode() {
+  return mobileInfoMedia.matches;
+}
+
+function openInfoPanel() {
+  dom.garden.classList.add("is-info-open");
+}
+
+function closeInfoPanel() {
+  dom.garden.classList.remove("is-info-open");
+}
+
+function syncInfoPanelMode() {
+  if (isMobileInfoMode()) {
+    closeInfoPanel();
+    return;
+  }
+
+  openInfoPanel();
+}
+
+function handleCanvasPointerDown(event) {
+  if (!isMobileInfoMode() || dom.garden.classList.contains("is-qr-open")) return;
+  canvasTapStart = {
+    x: event.clientX,
+    y: event.clientY,
+    time: performance.now()
+  };
+}
+
+function handleCanvasPointerUp(event) {
+  if (!canvasTapStart || !isMobileInfoMode() || dom.garden.classList.contains("is-qr-open")) {
+    canvasTapStart = null;
+    return;
+  }
+
+  const distance = Math.hypot(event.clientX - canvasTapStart.x, event.clientY - canvasTapStart.y);
+  const elapsed = performance.now() - canvasTapStart.time;
+  canvasTapStart = null;
+
+  if (distance < 10 && elapsed < 700) {
+    openInfoPanel();
+  }
 }
 
 function setMood(name) {
