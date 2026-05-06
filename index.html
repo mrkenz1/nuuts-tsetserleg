@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="mn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="QR-аар нээгддэг нууц үгтэй 3D цэцгийн бэлэг."
+    />
+    <title>Нууц цэцэрлэг</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+        }
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main class="app-shell" id="appShell" aria-live="polite">
+      <section class="gate" id="gate" aria-labelledby="gateTitle">
+        <div class="gate__glow" aria-hidden="true"></div>
+        <div class="gate__panel">
+          <p class="eyebrow">QR цэцгийн бэлэг</p>
+          <h1 id="gateTitle">Мөнхийн цэцэрлэг</h1>
+          <p class="gate__copy">
+            Чамд зориулсан цэцэрлэг сарнай, алтанзул, сараана.
+          </p>
+          <form class="password-form" id="passwordForm">
+            <label for="passwordInput">Нууц үг</label>
+            <div class="password-form__row">
+              <input
+                id="passwordInput"
+                name="password"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="••••"
+                aria-describedby="passwordHint passwordError"
+              />
+              <button type="submit">Нээх</button>
+            </div>
+            <p class="hint" id="passwordHint">Тусламж: чиний төрсөн өдөр</p>
+            <p class="error" id="passwordError" role="alert"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="garden is-locked" id="garden" aria-label="3D цэцгийн үзэгч">
+        <canvas id="flowerCanvas"></canvas>
+
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Амид цэцэрлэгт хүрээлэн</p>
+            <h2 id="flowerTitle">Сарнай</h2>
+          </div>
+          <div class="topbar__actions" aria-label="Үйлдлүүд">
+            <button class="icon-button" id="autoRotateBtn" type="button" aria-pressed="true" title="Автомат эргүүлэх">
+              ↻
+            </button>
+            <button class="icon-button" id="qrToggleBtn" type="button" aria-expanded="false" title="QR">
+              ▦
+            </button>
+          </div>
+        </header>
+
+        <nav class="flower-tabs" aria-label="Цэцэг сонгох">
+          <button class="flower-tab is-active" type="button" data-flower="rose">Сарнай</button>
+          <button class="flower-tab" type="button" data-flower="tulip">Алтанзул</button>
+          <button class="flower-tab" type="button" data-flower="lily">Сараана</button>
+        </nav>
+
+        <aside class="info-panel" aria-labelledby="infoTitle">
+          <p class="eyebrow" id="infoCategory">Rosa</p>
+          <h3 id="infoTitle">Сарнай</h3>
+          <p id="infoSummary"></p>
+          <dl class="facts" id="flowerFacts"></dl>
+        </aside>
+
+        <div class="mood-strip" aria-label="Өнгө аяс">
+          <button class="mood-swatch is-active" type="button" data-mood="dawn" aria-label="Үүрийн ягаан"></button>
+          <button class="mood-swatch" type="button" data-mood="velvet" aria-label="Хилэн улаан"></button>
+          <button class="mood-swatch" type="button" data-mood="pearl" aria-label="Сувдан цагаан"></button>
+          <button class="mood-swatch" type="button" data-mood="gold" aria-label="Алтан дулаан"></button>
+        </div>
+
+        <aside class="qr-panel" id="qrPanel" aria-labelledby="qrTitle" hidden>
+          <div class="qr-panel__head">
+            <div>
+              <p class="eyebrow">Дотроо үүссэн QR</p>
+              <h3 id="qrTitle">Нэвтрэх код</h3>
+            </div>
+            <button class="icon-button" id="qrCloseBtn" type="button" title="Хаах">×</button>
+          </div>
+          <div id="qrCode" class="qr-code" role="img" aria-label="Сайтын QR код"></div>
+          <label class="qr-panel__label" for="qrUrl">QR холбоос</label>
+          <input id="qrUrl" type="url" />
+          <div class="qr-panel__actions">
+            <button type="button" id="copyLinkBtn">Хуулах</button>
+            <button type="button" id="downloadQrBtn">QR татах</button>
+          </div>
+          <p class="qr-status" id="qrStatus" role="status"></p>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
